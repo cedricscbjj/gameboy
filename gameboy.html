@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Game Boy by Martin Gauer</title>
+
+
+  <link rel="stylesheet" href="gameboy.css">
+
+
+
+</head>
+<body>
+  <div class="gameboy">
+    <div class="front-plate">
+
+      <div class="front-plate-head">
+        <div class="vertical-stripe"></div>
+        <div class="vertical-stripe"></div>
+        <div class="vertical-stripe"></div>
+  
+        <div class="vertical-gouge vertical-gouge-1"></div>
+        <div class="vertical-gouge vertical-gouge-2"></div>
+  
+        <div class="on-off">
+          <div class="spike spike-left"><div></div></div>
+          <div class="spike spike-right"><div></div></div>
+          <span>
+            OFF
+            <i></i>
+            ON
+          </span>
+        </div>
+      </div>
+  
+      <div class="screen-container">
+        <div class="screen-headline">
+          <span>DOT MATRIX WITH STEREO SOUND</span>
+        </div>
+  
+        <div class="battery-light">
+          <span>BATTERY</span>
+        </div>
+  
+        <div class="screen">
+  
+<div id="fontest"></div>
+  <div id="presentationscreen"></div>
+
+  <div id="status">Points de vie du personnage : <span id="health">20</span></div>
+
+        </div>
+      </div>
+  
+      <div class="logo"></div>
+  
+      <div id="controller">
+  
+        <div class="buttons-a-b">
+          <div class="button-b button-key-j" id="controller_b" onclick="personnage.frapper()"></div>
+  
+          <div class="button-a button-key-k" id="controller_a" onclick="personnage.guerir()"></div> 
+        </div>
+        
+        <div class="start button-key-m" id="controller_start" onclick="launch()"><div></div></div>
+  
+        <div class="select button-key-n" id="controller_select"><div></div></div>
+  
+        <div class="cross-container">
+          <div class="spike"><div></div></div>
+          <div class="spike"><div></div></div>
+          <div class="spike"><div></div></div>
+          <div class="spike"><div></div></div>
+  
+          <div class="cross" id="controller_dpad">
+            <div class="top-down">
+              <div class="button-top button-key-w" id="controller_up">
+                <div class="button-stripe"></div>
+                <div class="button-stripe"></div>
+                <div class="button-stripe"></div>
+              </div>
+              <div class="button-bottom button-key-s" id="controller_down">
+                <div class="button-stripe"></div>
+                <div class="button-stripe"></div>
+                <div class="button-stripe"></div>
+              </div>
+            </div>
+  
+            <div class="left-right">
+              <div class="button-left button-key-a" id="controller_left">
+                <div class="button-stripe"></div>
+                <div class="button-stripe"></div>
+                <div class="button-stripe"></div>
+              </div>
+              <div class="button-right button-key-d" id="controller_right">
+                <div class="button-stripe"></div>
+                <div class="button-stripe"></div>
+                <div class="button-stripe"></div>
+              </div>
+            </div>
+            <div class="cross-middle-bumb"></div>
+          </div>
+        </div>
+  
+      </div>
+  
+      <div class="speaker">
+        <div><div class="speaker-inner-shadow"></div></div>
+        <div><div class="speaker-inner-shadow"></div></div>
+        <div><div class="speaker-inner-shadow"></div></div>
+        <div><div class="speaker-inner-shadow"></div></div>
+        <div><div class="speaker-inner-shadow"></div></div>
+        <div><div class="speaker-inner-shadow"></div></div>
+      </div>
+  
+      <div class="phones" id="volume-switch">
+        <div class="vertical-stripe"></div>
+        <div class="vertical-stripe"></div>
+        <div class="vertical-stripe"></div> 
+        <i></i>
+        <span>PHONES</span>
+      </div>
+  
+    </div>
+  
+    <div class="power-button"><div></div></div>
+  </div>
+
+
+
+  <script>
+
+//modal.style.display = "block";
+
+const status = document.getElementById("status");
+let personnage;
+class Personnage {
+  constructor() {
+    this.pointsDeVie = 20;
+    this.healthElement = document.getElementById("health");
+  }
+
+  frapper() {
+    console.log("boum");
+    if (this.pointsDeVie > 0) {
+      this.pointsDeVie--;
+      this.majAffichage();
+    } else {
+      console.log("Le personnage est déjà mort !");
+    }
+  }
+
+  guerir() {
+    if (this.pointsDeVie < 20) {
+      this.pointsDeVie++;
+      this.majAffichage();
+    } else {
+      console.log("Le personnage a déjà tous ses points de vie !");
+    }
+  }
+
+  majAffichage() {
+    if (this.healthElement) {
+      this.healthElement.innerText = this.pointsDeVie;
+
+      if (this.pointsDeVie <= 0) {
+        document.getElementById("status").innerText = "Le personnage est mort !";
+      } else if (this.pointsDeVie === 10) {
+        document.getElementById("status").innerText = "Le personnage est entre la vie et la mort !";
+      } else {
+        document.getElementById("status").innerText = "Points de vie du personnage : " + this.pointsDeVie;
+      }
+    } else {
+      console.error("Élément de santé non trouvé.");
+    }
+  }
+}
+
+
+
+
+function launch() {
+  // Afficher le mot Nintendo
+  document.getElementById("fontest").innerHTML = "Nintendo";
+
+  // Attendre 3 secondes et ensuite changer le mot
+  setTimeout(function () {
+    document.getElementById("fontest").innerHTML = "";
+    document.getElementById("presentationscreen").innerHTML = "Game of Death";
+
+    // Attendre à nouveau 3 secondes et ensuite effacer le mot "Game of Death"
+    setTimeout(function () {
+      document.getElementById("presentationscreen").innerHTML = "";
+      startGame();
+    }, 3000);
+  }, 3000);
+}
+
+
+
+
+
+function startGame() {
+  status.style.display = "block";
+
+  // Création d'une instance de la classe Personnage
+   personnage = new Personnage();
+}
+
+
+
+  </script>
+</body>
+</html>
